@@ -39,14 +39,35 @@
     </form>
     <?php
         echo "<p class='alert'>Hola Mundo</p>";
-        $users[]=array('name'=>'Admin','psw'=>'stitch','roll'=>'admin');
+        //$users[]=array('name'=>'Admin','psw'=>'stitch','roll'=>'admin');
         if(isset($_GET['nombre'])){
-            echo "<p>Se enviaron Datos</p>";
+            $con= new mysqli('localhost','root','','tiendautrm');
+
+            if($con->connect_errno){
+                echo "<p class='error'>".$con->connect_error."</p>";
+                exit();
+            }
+            $query="select id, username, roll from users
+            where username=? and psw=? ";
+
+            $stmt=$con->prepare($query);
+
+            if($stmt){
+                $stmt->bind_param("ss",$_GET['nombre'],$_GET['psw']);
+                $stmt->execute();
+
+                $result= $stmt->get_result();
+                echo "<span>".$result->num_rows."</span>";
+
+                var_dump($result->fetch_assoc());
+            }
+            //Eliminar de la línea 64 a la a 70
+            /*echo "<p>Se enviaron Datos</p>";
             if($_GET['nombre']==$users[0]['name'] && $_GET['psw']==$users[0]['psw']){
                 header('location:dashboard/index_admin.php');
             } else {
                 header("location:index.php?errno=1");
-            }
+            }*/
         } else {
             echo "<p>No se enviaron datos</p>";
         }
