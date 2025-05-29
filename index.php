@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,17 +61,23 @@
                 $stmt->execute();
 
                 $result= $stmt->get_result();
-                echo "<span>".$result->num_rows."</span>";
+                //echo "<span>".$result->num_rows."</span>";
+                //Si no encuentra registro
+                if($result->num_rows!=1){
+                    header("location:index.php?errno=1");
+                }
 
-                var_dump($result->fetch_assoc());
+                //var_dump($result->fetch_assoc());
+                //Declaro variables de $_SESSION
+                $row=$result->fetch_assoc();
+                $_SESSION['id']=$row['id'];
+                $_SESSION['username']=$row['username'];
+                $_SESSION['roll']=$row['roll'];
+
+                //Redirección
+                header("location:dashboard/index_".$row['roll'].".php");
             }
-            //Eliminar de la línea 64 a la a 70
-            /*echo "<p>Se enviaron Datos</p>";
-            if($_GET['nombre']==$users[0]['name'] && $_GET['psw']==$users[0]['psw']){
-                header('location:dashboard/index_admin.php');
-            } else {
-                header("location:index.php?errno=1");
-            }*/
+            
         } else {
             echo "<p>No se enviaron datos</p>";
         }
