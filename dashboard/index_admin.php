@@ -1,5 +1,10 @@
 <?php
 session_start();
+
+if(!$_SESSION['username']){
+    header("location:../index.php?msg=3");
+}
+
 /*Consultar a la base de datos */
 
 ?>
