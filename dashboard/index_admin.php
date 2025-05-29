@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if(!$_SESSION['username']){
+if (!$_SESSION['username']) {
     header("location:../index.php?msg=3");
 }
 
@@ -75,7 +75,15 @@ if(!$_SESSION['username']){
             <div class="col-md-9 col-lg-10 main-content">
                 <h2>Lista de Usuarios</h2>
                 <button class="btn btn-primary mb-3" onclick="add(this)">Agregar Usuario</button>
+                <?php
+                $con = new mysqli('localhost', 'root', '', 'tiendautrm');
 
+                if ($con->connect_errno) {
+                } else {
+                    $query = "select id, username, roll, visible from users";
+                    $result = $con->query($query);
+                }
+                ?>
                 <!-- Tabla de Usuarios -->
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
@@ -89,23 +97,31 @@ if(!$_SESSION['username']){
                             </tr>
                         </thead>
                         <tbody id="table">
-                                <tr>
-                                    <td>No. 01</td>
-                                    <td> Israel Rafael</td>
-                                    <td>Admin</td>
-                                    <td><a class="visible-on" href="#" data-id="on">on</a></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-warning save">Editar</button>
-                                        <button class="btn btn-sm btn-danger remove">Eliminar</button>
-                                    </td>
-                                </tr>
+                            <?php
+                                while($row=$result->fetch_assoc()){
+                            ?>
+                            <tr>
+                                <td>No. <?php echo $row['id'];?></td>
+                                <td><?php echo $row['username'];?></td>
+                                <td><?php echo $row['roll'];?></td>
+                                <td><a class="visible-on" href="#" data-id="<?php echo $row['visible'];?>">
+                                    <?php echo ($row['visible']==1)?'on':'off';?>
+                                </a></td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning save">Editar</button>
+                                    <button class="btn btn-sm btn-danger remove">Eliminar</button>
+                                </td>
+                            </tr>
+                            <?php
+                                }
+                            ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-   
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

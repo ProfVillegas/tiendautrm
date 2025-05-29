@@ -67,7 +67,7 @@ session_start();
                     header("location:index.php?errno=1");
                 }
 
-                //var_dump($result->fetch_assoc());
+                
                 //Declaro variables de $_SESSION
                 $row=$result->fetch_assoc();
                 $_SESSION['id']=$row['id'];
