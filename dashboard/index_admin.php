@@ -98,22 +98,22 @@ if (!$_SESSION['username']) {
                         </thead>
                         <tbody id="table">
                             <?php
-                                while($row=$result->fetch_assoc()){
+                            while ($row = $result->fetch_assoc()) {
                             ?>
-                            <tr>
-                                <td>No. <?php echo $row['id'];?></td>
-                                <td><?php echo $row['username'];?></td>
-                                <td><?php echo $row['roll'];?></td>
-                                <td><a class="visible" href="#" data-id="<?php echo $row['id'];?>"  data-visble="<?php echo $row['visible'];?>">
-                                    <?php echo ($row['visible']==1)?'on':'off';?>
-                                </a></td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning save">Editar</button>
-                                    <button class="btn btn-sm btn-danger remove">Eliminar</button>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>No. <?php echo $row['id']; ?></td>
+                                    <td><?php echo $row['username']; ?></td>
+                                    <td><?php echo $row['roll']; ?></td>
+                                    <td><a class="visible" href="#" data-id="<?php echo $row['id']; ?>" data-visible="<?php echo $row['visible']; ?>">
+                                            <?php echo ($row['visible'] == 1) ? 'on' : 'off'; ?>
+                                        </a></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning save">Editar</button>
+                                        <button class="btn btn-sm btn-danger remove">Eliminar</button>
+                                    </td>
+                                </tr>
                             <?php
-                                }
+                            }
                             ?>
                         </tbody>
                     </table>
@@ -122,41 +122,41 @@ if (!$_SESSION['username']) {
         </div>
     </div>
     <script>
-        document.addEventListener('click',function(event){
+        document.addEventListener('click', function(event) {
             console.log(event.target);
-            data= JSON.stringify([{
-                op:'visible',
-                id:1,
-                vs:0,
-                tb:'users'
-            }]);
-            AjaxRequest(data);
-            if(event.target.matches('.visible')){
+            if (event.target.matches('.visible')) {
+                data = JSON.stringify([{
+                    op: 'visible',
+                    id: event.target.dataset.id,
+                    vs: event.target.dataset.visible,
+                    tb: 'users'
+                }]);
+                AjaxRequest(data);
                 event.preventDefault();
-                if(event.target.dataset.visible=="1"){
-                    event.target.dataset.visible=0;
-                    event.target.textContent="off";
+                if (event.target.dataset.visible == "1") {
+                    event.target.dataset.visible = 0;
+                    event.target.textContent = "off";
                 } else {
-                    event.target.dataset.visible=1;
-                    event.target.textContent="on";
+                    event.target.dataset.visible = 1;
+                    event.target.textContent = "on";
                 }
             }
         });
 
-        function AjaxRequest(data){
-            return fetch('request.php',{
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:data
-            })
-            .then(response =>response.json())
-            .then(json=>{
-                return json;
-            }).catch(error=>{
-                alert("Error: "+error);
-            });
+        function AjaxRequest(data) {
+            return fetch('request.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: data
+                })
+                .then(response => response.json())
+                .then(json => {
+                    return json;
+                }).catch(error => {
+                    alert("Error: " + error);
+                });
         }
     </script>
 
