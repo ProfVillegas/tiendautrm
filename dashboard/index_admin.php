@@ -104,7 +104,7 @@ if (!$_SESSION['username']) {
                                 <td>No. <?php echo $row['id'];?></td>
                                 <td><?php echo $row['username'];?></td>
                                 <td><?php echo $row['roll'];?></td>
-                                <td><a class="visible-on" href="#" data-id="<?php echo $row['visible'];?>">
+                                <td><a class="visible" href="#" data-id="<?php echo $row['id'];?>"  data-visble="<?php echo $row['visible'];?>">
                                     <?php echo ($row['visible']==1)?'on':'off';?>
                                 </a></td>
                                 <td>
@@ -121,7 +121,44 @@ if (!$_SESSION['username']) {
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('click',function(event){
+            console.log(event.target);
+            data= JSON.stringify([{
+                op:'visible',
+                id:1,
+                vs:0,
+                tb:'users'
+            }]);
+            AjaxRequest(data);
+            if(event.target.matches('.visible')){
+                event.preventDefault();
+                if(event.target.dataset.visible=="1"){
+                    event.target.dataset.visible=0;
+                    event.target.textContent="off";
+                } else {
+                    event.target.dataset.visible=1;
+                    event.target.textContent="on";
+                }
+            }
+        });
 
+        function AjaxRequest(data){
+            return fetch('request.php',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:data
+            })
+            .then(response =>response.json())
+            .then(json=>{
+                return json;
+            }).catch(error=>{
+                alert("Error: "+error);
+            });
+        }
+    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
